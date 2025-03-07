@@ -1,0 +1,60 @@
+@startuml HotelUseCaseDiagram
+top to bottom direction
+
+skinparam actorStyle awesome
+skinparam linetype ortho    
+
+skinparam packagePadding 20
+skinparam componentPadding 20
+skinparam nodePadding 30
+
+skinparam actor {
+    borderThickness 3
+}
+
+actor "User" as User
+actor "Admin" as Admin
+
+package "Hotel System" as hotelSystem {
+    usecase "View Hotel" as getAllHotel
+    usecase "Manage Hotel" as manageHotel
+}
+
+package "Authentication" as authentication{
+    usecase "Register" as register
+    usecase "Login" as login
+    usecase "View Profile" as getMe
+    usecase "Logout" as logout
+}
+
+package "Booking System" as bookingSystem {
+    package "Single" as single {
+        usecase "View Own Booking" as getOneBooking
+        usecase "Manage Own Booking" as manageOneBooking
+
+    }
+    package "All" as all {
+        usecase "Manage All Booking" as manageAllBooking
+        usecase "View All User" as getAllBooking
+    }
+}
+
+authentication -[hidden]- bookingSystem
+
+User --[#Blue]-> register
+User --[#Blue]-> login
+User --[#Blue]-> getMe
+User --[#Blue]-> logout
+User --[#Blue]-> getAllHotel
+User --[#Blue]-> getOneBooking
+User --[#Blue]-> manageOneBooking
+
+Admin --[#Green]-> register
+Admin --[#Green]-> login
+Admin --[#Green]-> getMe
+Admin --[#Green]-> getAllHotel
+Admin --[#Green]-> manageHotel
+Admin --[#Green]-> getAllBooking
+Admin --[#Green]-> manageAllBooking
+
+@enduml

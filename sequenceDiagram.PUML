@@ -1,0 +1,78 @@
+@startuml Manage Booking (CRUD)
+
+header Booking Sequence Diagram
+title "Manage Booking (CRUD)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:bookings" as routerBookings
+participant "<<controllers>>\n:bookings" as controllersBookings
+participant "<<model>>\n:Booking" as modelBooking
+database "<<MongoDB>>\n:Bookings" as BookingsDatabase
+
+== Manage Booking (POST) ==
+
+client->server ++:req.post('/api/v1/hotelId/bookings')
+server->routerBookings ++:app.use('/api/v1/hotelId/bookings , bookings')
+routerBookings -> controllersBookings ++:addBooking()
+controllersBookings->modelBooking ++:addBooking(req.body)
+modelBooking ->BookingsDatabase ++: Bookingschema
+BookingsDatabase --> modelBooking --: Booking
+controllersBookings <-- modelBooking --: Booking
+controllersBookings->routerBookings --:response
+routerBookings->server --:response
+server->client --:response
+
+== Manage Booking (GET ALL) ==
+
+client->server ++:req.get('/api/v1/bookings')
+server->routerBookings ++:app.use('/api/v1/bookings)
+routerBookings -> controllersBookings ++:Booking()
+controllersBookings->modelBooking ++:getBooking()   
+modelBooking ->BookingsDatabase ++: Bookingschema
+BookingsDatabase --> modelBooking --: Booking
+controllersBookings <-- modelBooking --: Bookings
+controllersBookings->routerBookings --:response
+routerBookings->server --:response
+server->client --:response
+
+== Manage Booking (GET) ==
+
+client->server ++:req.get('/api/v1/hotelId/bookings/bookingId')
+server->routerBookings ++:app.use('/api/v1/hotelId/bookings/bookingId')
+routerBookings -> controllersBookings ++:getBooking()
+controllersBookings->modelBooking ++:getBooking(bookingId)
+modelBooking ->BookingsDatabase ++: Bookingschema
+BookingsDatabase --> modelBooking --: Booking
+controllersBookings <-- modelBooking --: Booking
+controllersBookings->routerBookings --:response
+routerBookings->server --:response
+server->client --:response
+
+== Manage Booking (PUT) ==
+
+client->server ++:req.put('/api/v1/hotelId/bookings/bookingId')
+server->routerBookings ++:app.use('/api/v1/hotelId/bookings/bookingId')
+routerBookings -> controllersBookings ++:updateBooking()
+controllersBookings->modelBooking ++:updateBooking(bookingId)
+modelBooking ->BookingsDatabase ++: Bookingschema
+BookingsDatabase --> modelBooking --: Booking
+controllersBookings <-- modelBooking --: Booking
+controllersBookings->routerBookings --:response
+routerBookings->server --:response
+server->client --:response
+
+== Manage Booking (DELETE) ==
+
+client->server ++:req.delete('/api/v1/hotelId/bookings/bookingId')
+server->routerBookings ++:app.use('/api/v1/hotelId/bookings/bookingId')
+routerBookings -> controllersBookings ++:deleteBooking()
+controllersBookings->modelBooking ++:deleteBooking(bookingId)
+modelBooking ->BookingsDatabase ++: Bookingschema
+BookingsDatabase --> modelBooking --: {}
+controllersBookings <-- modelBooking --: {}
+controllersBookings->routerBookings --:response
+routerBookings->server --:response
+server->client --:response
+
+@enduml
